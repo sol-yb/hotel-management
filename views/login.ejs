@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Hotel Pulse</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><span>🏨</span>Solomon YT resort</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/suggestions">Suggestions</a>
+      <a href="/register">Register</a>
+    </nav>
+  </header>
+  <section class="form-card">
+    <h2>Login</h2>
+    <% if (error) { %>
+    <div class="alert"><%= error %></div>
+    <% } %>
+    <form method="POST" action="/login">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required />
+      <button class="button" type="submit">Sign In</button>
+    </form>
+    <p>Need an account? <a href="/register">Register</a></p>
+  </section>
+</body>
+</html>

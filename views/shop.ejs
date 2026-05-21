@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop - Solomon YT Resort</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><span>🏨</span>Solomon YT Resort</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/food-menu">Food</a>
+      <a href="/shop">Shop</a>
+      <% if (user) { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/suggestions">Suggestions</a>
+      <a href="/logout">Logout</a>
+      <% } else { %>
+      <a href="/login">Login</a>
+      <% } %>
+    </nav>
+  </header>
+  <section class="section-title">
+    <h2>Super Market</h2>
+    <p>Find groceries, travel gear, snacks, toiletries and more all in one place.</p>
+    <% if (user) { %>
+    <a class="button-small" href="/order-shop">Shop now</a>
+    <% } else { %>
+    <a class="button-small" href="/login">Login to shop</a>
+    <% } %>
+  </section>
+
+  <!-- Browse by Category Section -->
+  <section class="category-browse">
+    <h3>Browse by Category</h3>
+    <div class="category-grid">
+      <% categories.forEach(cat => { %>
+      <a href="/shop?category=<%= encodeURIComponent(cat.category) %>" class="category-card">
+        <div class="category-icon"><%= cat.category.charAt(0) %></div>
+        <span><%= cat.category %></span>
+      </a>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="form-card">
+    <h3>Search & Filter</h3>
+    <form method="GET" action="/shop" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: end;">
+      <div>
+        <label for="search">Search</label>
+        <input id="search" name="search" type="text" placeholder="Search items..." />
+      </div>
+      <div>
+        <label for="category">Category</label>
+        <select id="category" name="category">
+          <option value="">All Categories</option>
+          <% categories.forEach(cat => { %>
+          <option value="<%= cat.category %>"><%= cat.category %></option>
+          <% }) %>
+        </select>
+      </div>
+      <button class="button" type="submit">Search</button>
+      <a href="/shop" class="button button-secondary">Clear</a>
+    </form>
+  </section>
+
+  <div class="cards-grid">
+    <% items.forEach(item => { %>
+    <div class="card">
+      <img src="<%= item.image_url || 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=250&q=80' %>" alt="<%= item.name %>" />
+      <div class="card-content">
+        <h3><%= item.name %></h3>
+        <p><strong><%= item.category %></strong> • $<%= item.price.toFixed(2) %></p>
+        <p><%= item.description %></p>
+        <% if (user) { %>
+        <div class="quantity-controls">
+          <button class="qty-btn" onclick="changeQuantity('<%= item.id %>', -1)">-</button>
+          <span class="qty-display" id="qty-<%= item.id %>">0</span>
+          <button class="qty-btn" onclick="changeQuantity('<%= item.id %>', 1)">+</button>
+          <button class="add-to-cart-btn" onclick="addToCart('<%= item.id %>', '<%= item.name %>', <%= item.price %>)">Add to Cart</button>
+        </div>
+        <% } %>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+
+  <% if (user) { %>
+  <div class="cart-summary" id="cartSummary" style="display: none;">
+    <h3>Your Cart</h3>
+    <div id="cartItems"></div>
+    <div class="cart-total">
+      <strong>Total: $<span id="cartTotal">0.00</span></strong>
+    </div>
+    <a href="/order-shop" class="button">Proceed to Checkout</a>
+  </div>
+  <% } %>
+
+  <script>
+    let cart = {};
+
+    function changeQuantity(itemId, change) {
+      if (!cart[itemId]) cart[itemId] = 0;
+      cart[itemId] = Math.max(0, cart[itemId] + change);
+      document.getElementById('qty-' + itemId).textContent = cart[itemId];
+      updateCartDisplay();
+    }
+
+    function addToCart(itemId, name, price) {
+      if (cart[itemId] > 0) {
+        alert(`Added ${cart[itemId]} x ${name} to cart!`);
+        updateCartDisplay();
+      }
+    }
+
+    function updateCartDisplay() {
+      const cartItems = document.getElementById('cartItems');
+      const cartTotal = document.getElementById('cartTotal');
+      const cartSummary = document.getElementById('cartSummary');
+
+      let total = 0;
+      let hasItems = false;
+
+      cartItems.innerHTML = '';
+      Object.keys(cart).forEach(itemId => {
+        if (cart[itemId] > 0) {
+          hasItems = true;
+          // This would need actual item data, simplified for demo
+          cartItems.innerHTML += `<p>${cart[itemId]} items (ID: ${itemId})</p>`;
+          total += cart[itemId] * 1; // Placeholder price
+        }
+      });
+
+      cartTotal.textContent = total.toFixed(2);
+      cartSummary.style.display = hasItems ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>

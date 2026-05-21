@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= guest.name %> History - Solomon YT Resort </title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><span>🏨</span>Solomon YT Resort</div>
+    <nav>
+      <a href="/admin">Admin</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <h1><%= guest.name %> Activity</h1>
+    <p>Full booking and order history, all guest spending, and timeline details.</p>
+  </section>
+
+  <div class="table-container">
+    <h2>Booking Timeline</h2>
+    <table>
+      <thead><tr><th>Room</th><th>Dates</th><th>Status</th><th>Total</th></tr></thead>
+      <tbody>
+        <% if (bookings.length === 0) { %>
+        <tr><td colspan="4">No bookings recorded.</td></tr>
+        <% } %>
+        <% bookings.forEach(booking => { %>
+        <tr>
+          <td><%= booking.room_number %></td>
+          <td><%= booking.check_in %> → <%= booking.check_out %></td>
+          <td><%= booking.status %></td>
+          <td>$<%= booking.total_cost.toFixed(2) %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-container">
+    <h2>Order History</h2>
+    <table>
+      <thead><tr><th>Order time</th><th>Room</th><th>Delivery</th><th>Status</th><th>Total</th></tr></thead>
+      <tbody>
+        <% if (orders.length === 0) { %>
+        <tr><td colspan="5">No orders recorded.</td></tr>
+        <% } %>
+        <% orders.forEach(order => { %>
+        <tr>
+          <td><%= new Date(order.order_time).toLocaleString() %></td>
+          <td><%= order.room_number || 'N/A' %></td>
+          <td><%= order.delivery %></td>
+          <td><%= order.status %></td>
+          <td>$<%= order.total_price.toFixed(2) %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>Guest activity timeline helps identify frequent guests, spending, and orders.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Solomon YT Resort</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><span>🏨</span>Solomon YT Resort</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/food-menu">Menu</a>
+      <a href="/shop">Shop</a>
+      <a href="/suggestions">Suggestions</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <h1>Welcome back, <%= user.name %></h1>
+    <p>Your personal guest dashboard shows active bookings, ordering history, and all activities in one place.</p>
+  </section>
+
+  <div class="section-title">
+    <h2>Current & Past Bookings</h2>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr><th>Room</th><th>Check-in</th><th>Check-out</th><th>Status</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        <% if (bookings.length === 0) { %>
+        <tr><td colspan="5">No bookings yet.</td></tr>
+        <% } %>
+        <% bookings.forEach(booking => { %>
+        <tr>
+          <td><%= booking.room_number %> (<%= booking.type %>)</td>
+          <td><%= booking.check_in %></td>
+          <td><%= booking.check_out %></td>
+          <td><%= booking.status %></td>
+          <td>$<%= booking.total_cost.toFixed(2) %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title">
+    <h2>Food & Service History</h2>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr><th>Order</th><th>Room</th><th>Status</th><th>Delivery</th><th>Message</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        <% if (orders.length === 0) { %>
+        <tr><td colspan="6">No orders yet.</td></tr>
+        <% } %>
+        <% orders.forEach(order => { %>
+        <tr>
+          <td><%= new Date(order.order_time).toLocaleString() %></td>
+          <td><%= order.room_number || 'N/A' %></td>
+          <td><%= order.status %></td>
+          <td><%= order.delivery %></td>
+          <td><%= order.guest_message || 'N/A' %></td>
+          <td>$<%= order.total_price.toFixed(2) %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <div class="section-title">
+    <h2>Shop Purchase History</h2>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr><th>Order</th><th>Status</th><th>Message</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        <% if (!shopOrders || shopOrders.length === 0) { %>
+        <tr><td colspan="4">No shop orders yet.</td></tr>
+        <% } else { %>
+        <% shopOrders.forEach(order => { %>
+        <tr>
+          <td><%= new Date(order.order_time).toLocaleString() %></td>
+          <td><%= order.status %></td>
+          <td><%= order.guest_message || 'N/A' %></td>
+          <td>$<%= order.total_price.toFixed(2) %></td>
+        </tr>
+        <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+    <p>Your guest profile and activity timeline are stored for every booking and service order.</p>
+  </footer>
+</body>
+</html>

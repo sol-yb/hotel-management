@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotel Management</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="logo"><span>🏨</span>Solomon YT Resort</div>
+    <nav>
+      <a href="/rooms">Rooms</a>
+      <a href="/food-menu">Menu</a>
+      <a href="/shop">Shop</a>
+      <a href="/suggestions">Suggestions</a>
+      <% if (!user) { %>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+      <% } else { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/logout">Logout</a>
+      <% } %>
+      <% if (user && user.role === 'admin') { %>
+      <a href="/admin">Admin</a>
+      <% } %>
+    </nav>
+  </header>
+  <section class="hero">
+    <h1>Welcome to Solomon YT Resort — Your Ultimate Stay Experience</h1>
+    <p>Discover luxurious rooms, savor exquisite cuisine, and enjoy seamless booking with personalized guest history tracking. Whether you're here for business or leisure, we make every moment unforgettable.</p>
+    <div class="hero-actions">
+      <a class="button" href="/rooms">Explore Rooms</a>
+      <a class="button button-secondary" href="/food-menu">Browse Menu</a>
+      <a class="button button-secondary" href="/shop">view for shopping</a>
+    </div>
+  </section>
+
+  <div class="section-title">
+    <h2>Featured Rooms</h2>
+    <a class="button-small" href="/rooms">View all rooms</a>
+  </div>
+  <div class="cards-grid">
+    <% rooms.forEach(room => { %>
+    <div class="card">
+      <img src="<%= room.image_url || 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=250&q=80' %>" alt="<%= room.type %> room" />
+      <div class="card-content">
+        <h3>Room <%= room.room_number %> - <%= room.type %></h3>
+        <p><%= room.description || 'Comfortable stay with modern amenities.' %></p>
+      </div>
+      <div class="card-footer">
+        <span>$<%= room.price.toFixed(2) %>/night</span>
+        <a class="button button-secondary" href="/book-room/<%= room.id %>">Book</a>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+
+  <div class="section-title">
+    <h2>Featured Meals & Services</h2>
+    <a class="button-small" href="/food-menu">Browse menu</a>
+  </div>
+  <div class="cards-grid">
+    <% food.forEach(item => { %>
+    <div class="card">
+      <img src="<%= item.image_url || 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=250&q=80' %>" alt="<%= item.name %>" />
+      <div class="card-content">
+        <h3><%= item.name %></h3>
+        <p><%= item.category %> • $<%= item.price.toFixed(2) %></p>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+
+  <footer>
+    <p>Hotel Pulse MVP — Luxury stays, delicious dining, and seamless management. Experience the future of hospitality today!</p>
+  </footer>
+</body>
+</html>

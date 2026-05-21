@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - Hotel Pulse</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><span>🏨</span>Hotel Pulse</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/suggestions">Suggestions</a>
+      <a href="/login">Login</a>
+    </nav>
+  </header>
+  <section class="form-card">
+    <h2>Create Account</h2>
+    <% if (error) { %>
+    <div class="alert"><%= error %></div>
+    <% } %>
+    <form method="POST" action="/register">
+      <label for="name">Full Name</label>
+      <input id="name" name="name" type="text" required />
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required />
+      <button class="button" type="submit">Register</button>
+    </form>
+    <p>Already registered? <a href="/login">Login</a></p>
+  </section>
+</body>
+</html>

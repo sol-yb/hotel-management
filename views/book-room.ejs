@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Room <%= room.room_number %> - Solomon YT Resort</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><span>🏨</span>Solomon YT Resort</div>
+    <nav>
+      <a href="/rooms">Rooms</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/suggestions">Suggestions</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+  <section class="form-card">
+    <h2>Book Room <%= room.room_number %> - <%= room.type %></h2>
+    <% if (error) { %>
+    <div class="alert"><%= error %></div>
+    <% } %>
+    <p><%= room.description || 'Enjoy a relaxing stay with full hotel service.' %></p>
+    <form method="POST" action="/book-room/<%= room.id %>">
+      <label for="check_in">Check-in</label>
+      <input id="check_in" name="check_in" type="date" required />
+      <label for="check_out">Check-out</label>
+      <input id="check_out" name="check_out" type="date" required />
+      <label for="guests">Guest count</label>
+      <input id="guests" name="guests" type="number" min="1" value="1" required />
+      <button class="button" type="submit">Reserve room</button>
+    </form>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const checkInInput = document.getElementById('check_in');
+      const checkOutInput = document.getElementById('check_out');
+
+      // Set minimum check-in date to today
+      const today = new Date();
+      const todayString = today.toISOString().split('T')[0];
+      checkInInput.min = todayString;
+      checkInInput.value = todayString; // Set default to today
+
+      function updateCheckOutConstraints() {
+        if (checkInInput.value) {
+          const checkInDate = new Date(checkInInput.value);
+
+          // Set minimum check-out date to day after check-in
+          const minCheckOutDate = new Date(checkInDate);
+          minCheckOutDate.setDate(checkInDate.getDate() + 1);
+          const minCheckOutString = minCheckOutDate.toISOString().split('T')[0];
+          checkOutInput.min = minCheckOutString;
+
+          // Set maximum check-out date to 1 month from check-in
+          const maxCheckOutDate = new Date(checkInDate);
+          maxCheckOutDate.setMonth(checkInDate.getMonth() + 1);
+          const maxCheckOutString = maxCheckOutDate.toISOString().split('T')[0];
+          checkOutInput.max = maxCheckOutString;
+
+          // If current check-out date is invalid, reset it
+          if (checkOutInput.value && checkOutInput.value < minCheckOutString) {
+            checkOutInput.value = minCheckOutString;
+          }
+        }
+      }
+
+      // Update check-out constraints when check-in date changes
+      checkInInput.addEventListener('change', updateCheckOutConstraints);
+
+      // Initialize check-out constraints
+      updateCheckOutConstraints();
+    });
+  </script>
+</body>
+</html>

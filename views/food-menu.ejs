@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Menu - Solomon YT Resort</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><span>🏨</span>Solomon YT Resort</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/rooms">Rooms</a>
+      <a href="/shop">Shop</a>
+      <% if (user) { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/suggestions">Suggestions</a>
+      <a href="/logout">Logout</a>
+      <% } else { %>
+      <a href="/login">Login</a>
+      <% } %>
+    </nav>
+  </header>
+  <section class="section-title">
+    <h2>Food Menu</h2>
+    <% if (user) { %>
+    <a class="button-small" href="/order-food">Order now</a>
+    <% } else { %>
+    <a class="button-small" href="/login">Login to order</a>
+    <% } %>
+  </section>
+  <section class="form-card">
+    <h3>Search & Filter</h3>
+    <form method="GET" action="/food-menu" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: end;">
+      <div>
+        <label for="search">Search</label>
+        <input id="search" name="search" type="text" placeholder="Search food items..." />
+      </div>
+      <div>
+        <label for="category">Category</label>
+        <select id="category" name="category">
+          <option value="">All Categories</option>
+          <% categories.forEach(cat => { %>
+          <option value="<%= cat.category %>"><%= cat.category %></option>
+          <% }) %>
+        </select>
+      </div>
+      <button class="button" type="submit">Search</button>
+      <a href="/food-menu" class="button button-secondary">Clear</a>
+    </form>
+  </section>
+  <div class="cards-grid">
+    <% foods.forEach(item => { %>
+    <div class="card">
+      <img src="<%= item.image_url || 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=250&q=80' %>" alt="<%= item.name %>" />
+      <div class="card-content">
+        <h3><%= item.name %></h3>
+        <p><strong><%= item.category %></strong> • $<%= item.price.toFixed(2) %></p>
+        <p><%= item.description %></p>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+  <footer>
+    <p>Order food and hotel services directly from your guest dashboard.</p>
+  </footer>
+</body>
+</html>
